@@ -19,8 +19,7 @@ import static logic.SHA1.encodeHex;
 public class Controller {
 
     private boolean isFileOpened = false;
-    private int X;
-    private BigInteger BX;
+    private BigInteger X;
 
     @FXML
     private ResourceBundle resources;
@@ -76,86 +75,74 @@ public class Controller {
                             OpenFile();
                             if (isFileOpened)
                             {
-                                showAlert("AAAA", encodeHex("BSUIR"));
+                                //showAlert("AAAA", encodeHex("BSUIR"));
                                 hash = SHA1.getHash(Model.getData());
                                 System.out.println(encodeHex("BSUIR"));
-                                showAlert("Easy", hash.toString(16));
+                                //showAlert("Easy", hash.toString(16));
                                 System.out.println(hash.toString(16));
                                 signature = MathProvider.pow(hash, d, r);
-                                showAlert("Easy ^ 2", signature.toString());
+                                System.out.println(signature.toString(16));
+                                X = signature;
+                                //showAlert("Easy ^ 2", signature.toString());
+                                SaveFile();
                             }
                         }
                         else
-                            showAlert("Wrong d", "d must satisfy '(e*d) mod φ(r) = 1' ");
+                            showAlert("Error","Wrong d", "d must satisfy '(e*d) mod φ(r) = 1' ");
 
                     }
                     else
-                        showAlert("Wrong input", "P and Q must be prime");
+                        showAlert("Error","Wrong input", "P and Q must be prime");
                 }
                 else
-                    showAlert("Wrong input", "Please enter the numbers");
+                    showAlert("Error","Wrong input", "Please enter the numbers");
             }
         });
-    }
 
-//    @FXML
-//    private void OpenFileWithSHA1Signature()
-//    {
-//        FileChooser fileChooser = new FileChooser();//Класс работы с диалогом выборки и сохранения
-//        fileChooser.setTitle("Open File");//Заголовок диалога
-//        File file = fileChooser.showOpenDialog(STAGE);//Указываем текущую сцену
-//        if ((file != null))
-//        {
-//            byte[] data = FileManager.ReadTxtToIntArrWithSHA1Signature(file);
-//            Model.setDataSHA(data);
-//            try {
-//                readSHA1signature(file);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+        btnCheck.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if ((edtP.getText().length() > 0) && (edtQ.getText().length() > 0) && (edtB.getText().length() > 0))
+                {
+                    BigInteger p = new BigInteger(edtP.getText());
+                    BigInteger q = new BigInteger(edtQ.getText());
+                    BigInteger d = new BigInteger(edtB.getText());
+                    BigInteger r = p.multiply(q);
+                    BigInteger f = (p.subtract(BigInteger.valueOf(1))).multiply(q.subtract(BigInteger.valueOf(1)));
+                    BigInteger e, hash, s;
+                    if (MathProvider.isPrime(p) && (MathProvider.isPrime(q)))
+                    {
+                        e = Model.getE(f, d);
+                        if (e.gcd(d).mod(f).compareTo(BigInteger.valueOf(1)) == 0)
+                        {
+                            OpenFileWithSignature();
 
-//    @FXML
-//    private void OpenFileWithSignature()
-//    {
-//
-//        FileChooser fileChooser = new FileChooser();//Класс работы с диалогом выборки и сохранения
-//        fileChooser.setTitle("Open File");//Заголовок диалога
-//        File file = fileChooser.showOpenDialog(STAGE);//Указываем текущую сцену
-//        if ((file != null))
-//        {
-//            //Open
-//            int[] dataWithSign = logic.FileManager.ReadTxtToIntArrWithSignature(file);
-//            int[] data = new int[dataWithSign.length - 1];
-//            int len = data.length;
-//            X = dataWithSign[dataWithSign.length - 1];
-//            for (int i = 0; i < len; i++)
-//                data[i] = dataWithSign[i];
-//                Model.setData(data);
-////            BigInteger hash = SHA11.getHash(Model.getData());
-////            showAlert("Easy", hash.toString(16));
-//            isFileOpened = true;
-//        }
-//        else
-//        {
-//            isFileOpened = false;
-//            showAlert("Ошибка", "Что-то пошло не так. Выберите другой файл");
-//        }
-//    }
+                            if (isFileOpened)
+                            {
+                                hash = SHA1.getHash(Model.getData());
+                                s = MathProvider.pow(X, e, r);
+                                if (s.compareTo(hash) == 0) {
+                                    showAlert("EDS check", "Correct", "Signature is correct");
+                                    lblResult.setText("Correct");
+                                }
+                                else {
+                                    showAlert("EDS check", "Incorrect", "Signature is incorrect");
+                                    lblResult.setText("Incorrect");
 
-    private void readSHA1signature(File InputFile) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(InputFile), "UTF-8"));
-        ArrayList<String> arrS = new ArrayList<String>();
-        String s;
-        while ((s = reader.readLine()) != null)
-        {
-            arrS.add(s);
-        }
-        String[] temp1 = arrS.get(arrS.size() - 1).split(" ");
-        BigInteger sign;
-        sign = new BigInteger(temp1[temp1.length - 1]);
-        BX = sign;
+                                }
+                            }
+                        }
+                        else
+                            showAlert("Error","Wrong d", "d must satisfy '(e*d) mod φ(r) = 1' ");
+
+                    }
+                    else
+                        showAlert("Error","Wrong input", "P and Q must be prime");
+                }
+                else
+                    showAlert("Error","Wrong input", "Please enter the numbers");
+            }
+        });
     }
 
     @FXML
@@ -167,13 +154,33 @@ public class Controller {
         File file = fileChooser.showOpenDialog(STAGE);//Указываем текущую сцену
         if ((file != null))
         {
-            Model.setData(FileManager.ReadByteArr(file));
+            Model.setData(FileManager20.ReadByteArr(file));
             isFileOpened = true;
         }
         else
         {
             isFileOpened = false;
-            showAlert("Ошибка", "Что-то пошло не так. Выберите другой файл");
+            showAlert("Wrong file","Ошибка", "Что-то пошло не так. Выберите другой файл");
+        }
+    }
+
+    @FXML
+    private void OpenFileWithSignature()
+    {
+
+        FileChooser fileChooser = new FileChooser();//Класс работы с диалогом выборки и сохранения
+        fileChooser.setTitle("Open File");//Заголовок диалога
+        File file = fileChooser.showOpenDialog(STAGE);//Указываем текущую сцену
+        if ((file != null))
+        {
+            Model.setData(FileManager20.ReadByteArrWithSignature(file));
+            X = FileManager20.ReadSignature(file);
+            isFileOpened = true;
+        }
+        else
+        {
+            isFileOpened = false;
+            showAlert("Wring file","Ошибка", "Что-то пошло не так. Выберите другой файл");
         }
     }
 
@@ -186,19 +193,21 @@ public class Controller {
         File file = fileChooser.showOpenDialog(STAGE);//Указываем текущую сцену
         if ((file != null))
         {
-            //TODO save to a file
+            String strSignDec = X.toString();
+            FileManager20.SaveByteArr(Model.getData(), file);
+            FileManager20.AppendStr(strSignDec, file);
             isFileOpened = true;
         }
         else
         {
             isFileOpened = false;
-            showAlert("Ошибка", "Что-то пошло не так. Выберите другой файл");
+            showAlert("Wring file","Ошибка", "Что-то пошло не так. Выберите другой файл");
         }
     }
 
-    private void showAlert(String headerText, String contentText) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Wrong file");
+    private void showAlert(String title, String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
         alert.showAndWait();
