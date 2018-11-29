@@ -56,6 +56,27 @@ public class Controller {
 
     @FXML
     void initialize() {
+        edtP.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[0123456789]{0,256}"))
+            {
+                edtP.setText(newValue.replaceAll("[^[0123456789]]", ""));
+            }
+        });
+
+        edtQ.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[0123456789]{0,256}"))
+            {
+                edtQ.setText(newValue.replaceAll("[^[0123456789]]", ""));
+            }
+        });
+
+        edtB.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[0123456789]{0,256}"))
+            {
+                edtB.setText(newValue.replaceAll("[^[0123456789]]", ""));
+            }
+        });
+
         btnGenerate.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -67,7 +88,7 @@ public class Controller {
                     BigInteger r = p.multiply(q);
                     BigInteger f = (p.subtract(BigInteger.valueOf(1))).multiply(q.subtract(BigInteger.valueOf(1)));
                     BigInteger e, hash, signature;
-                    if (MathProvider.isPrime(p) && (MathProvider.isPrime(q)))
+                    if (MathProvider.isPrime(p) && (MathProvider.isPrime(q)) && (d.compareTo(BigInteger.ZERO) != 0))
                     {
                         e = Model.getE(f, d);
                         if (e.gcd(d).mod(f).compareTo(BigInteger.valueOf(1)) == 0)
@@ -83,6 +104,8 @@ public class Controller {
                                 signature = MathProvider.pow(hash, d, r);
                                 System.out.println(signature.toString(16));
                                 X = signature;
+                                arHash.setText("Hash(10) = " + hash.toString() + "\nHash(16) = " + hash.toString(16));
+                                arResults.setText("R = " + r.toString() + "\nSecret key = " + e.toString() + "\nSignature = " + signature.toString());
                                 //showAlert("Easy ^ 2", signature.toString());
                                 SaveFile();
                             }
@@ -92,7 +115,7 @@ public class Controller {
 
                     }
                     else
-                        showAlert("Error","Wrong input", "P and Q must be prime");
+                        showAlert("Error","Wrong input", "P and Q must be prime. B must be greater than zero");
                 }
                 else
                     showAlert("Error","Wrong input", "Please enter the numbers");
@@ -110,7 +133,7 @@ public class Controller {
                     BigInteger r = p.multiply(q);
                     BigInteger f = (p.subtract(BigInteger.valueOf(1))).multiply(q.subtract(BigInteger.valueOf(1)));
                     BigInteger e, hash, s;
-                    if (MathProvider.isPrime(p) && (MathProvider.isPrime(q)))
+                    if (MathProvider.isPrime(p) && (MathProvider.isPrime(q)) && (d.compareTo(BigInteger.ZERO) != 0))
                     {
                         e = Model.getE(f, d);
                         if (e.gcd(d).mod(f).compareTo(BigInteger.valueOf(1)) == 0)
@@ -128,7 +151,8 @@ public class Controller {
                                 else {
                                     showAlert("EDS check", "Incorrect", "Signature is incorrect");
                                     lblResult.setText("Incorrect");
-
+                                    arHash.setText("Hash(10) = " + hash.toString() + "\nHash(16) = " + hash.toString(16));
+                                    arResults.setText("R = " + r.toString() + "\nSecret key = " + e.toString() + "\nSignature = " + X.toString());
                                 }
                             }
                         }
@@ -137,7 +161,7 @@ public class Controller {
 
                     }
                     else
-                        showAlert("Error","Wrong input", "P and Q must be prime");
+                        showAlert("Error","Wrong input", "P and Q must be prime. B must be greater than zero");
                 }
                 else
                     showAlert("Error","Wrong input", "Please enter the numbers");

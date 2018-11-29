@@ -17,8 +17,6 @@ public class MathProvider {
         return (mul(a, b-1, m) + a) % m;
     }
 
-
-
     public static long  pows( long a,  long b,  long m){
         if(b==0)
             return 1;
@@ -51,37 +49,19 @@ public class MathProvider {
 
     //BigInteger
 
-    public static BigInteger pows(BigInteger a, BigInteger b, BigInteger m){
-        if(b.compareTo(BigInteger.valueOf(0)) == 0)
-            return BigInteger.ONE;
-        if(b.mod(BigInteger.valueOf(2)) == BigInteger.ZERO){
-            BigInteger t = pows(a, b.divide(BigInteger.valueOf(2)), m);
-            return mul(t , t, m).mod(m);
-        }
-        return (mul(pows(a, b.subtract(BigInteger.valueOf(1)), m) , a, m)).mod(m);
-    }
-
-    public static BigInteger mul(BigInteger  a,  BigInteger b,  BigInteger m){
-        if(b.compareTo(BigInteger.valueOf(1)) == 0)
-            return a;
-        if(b.mod(BigInteger.valueOf(2)) == BigInteger.ZERO){
-            BigInteger t = mul(a, b.divide(BigInteger.valueOf(2)), m);
-            return (t.multiply(BigInteger.valueOf(2))).mod(m);
-        }
-        return (mul(a, b.subtract(BigInteger.valueOf(1)), m).add(a)).mod(m);
-    }
-
     public static BigInteger gcd(BigInteger a, BigInteger b){
         if(b.compareTo(BigInteger.valueOf(0)) == 0)
             return a;
         return gcd(b, a.mod(b));
     }
 
-    public static boolean isPrime(BigInteger x){ //Ferma's test
+    public static boolean isPrime(BigInteger x){  //Ferma's test
+        if(x.compareTo(BigInteger.valueOf(0)) == 0)
+            return false;
         if(x.compareTo(BigInteger.valueOf(2)) == 0)
             return true;
         Random rand = new Random();
-        for(int i = 0;i < 100;i++){
+        for(int i = 0;i < 200;i++){
             BigInteger a = (BigInteger.valueOf(rand.nextInt()).mod(x.subtract(BigInteger.valueOf(2)))).add(BigInteger.valueOf(2));
             if (gcd(a, x).compareTo(BigInteger.valueOf(1)) != 0)
                 return false;

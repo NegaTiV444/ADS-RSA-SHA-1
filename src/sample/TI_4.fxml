@@ -2,28 +2,21 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="559.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <TextField fx:id="edtP" layoutX="26.0" layoutY="58.0" prefHeight="26.0" prefWidth="748.0" promptText="p" text="359334085968622831041960188598043661065388726959079837" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="58.0" />
-      <TextField fx:id="edtQ" layoutX="26.0" layoutY="101.0" promptText="q" text="35742549198872617291353508656626642567" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="101.0" />
+      <TextField fx:id="edtQ" layoutX="26.0" layoutY="101.0" promptText="q" text="35742549198872617291353508656626642567" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="58.0" />
+      <TextField fx:id="edtP" layoutX="26.0" layoutY="58.0" prefHeight="26.0" prefWidth="748.0" promptText="p" text="359334085968622831041960188598043661065388726959079837" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="101.0" />
       <TextField fx:id="edtB" layoutX="26.0" layoutY="145.0" promptText="secret key" text="27644437" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="145.0" />
-      <TextArea fx:id="arResults" layoutX="240.0" layoutY="460.0" prefHeight="110.0" prefWidth="748.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" />
-      <TextArea fx:id="arHash" layoutX="26.0" layoutY="314.0" prefHeight="110.0" prefWidth="360.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" />
-      <Label layoutX="361.0" layoutY="434.0" text="Hash message" />
-      <Label layoutX="381.0" layoutY="291.0" text="Results" />
-      <Button fx:id="btnGenerate" layoutX="600.0" layoutY="231.0" mnemonicParsing="false" onMouseClicked="#OpenFile" text="Generate" AnchorPane.rightAnchor="144.0" />
-      <Button fx:id="btnCheck" layoutX="92.0" layoutY="231.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="Check" AnchorPane.leftAnchor="144.0" />
-      <MenuBar layoutY="2.0" prefHeight="26.0" prefWidth="600.0">
-        <menus>
-          <Menu fx:id="openFile" mnemonicParsing="false" text="Open file" />
-        </menus>
-      </MenuBar>
+      <TextArea fx:id="arResults" blendMode="MULTIPLY" editable="false" layoutX="26.0" layoutY="421.0" prefHeight="110.0" prefWidth="748.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" />
+      <TextArea fx:id="arHash" editable="false" layoutX="26.0" layoutY="314.0" prefHeight="68.0" prefWidth="748.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" />
+      <Label layoutX="355.0" layoutY="291.0" text="Hash message" />
+      <Label layoutX="374.0" layoutY="393.0" text="Results" />
+      <Button fx:id="btnGenerate" layoutX="140.0" layoutY="231.0" mnemonicParsing="false" onMouseClicked="#OpenFile" text="Generate" AnchorPane.rightAnchor="595.2" />
+      <Button fx:id="btnCheck" layoutX="596.0" layoutY="230.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="Check" AnchorPane.leftAnchor="596.0" />
       <Label fx:id="lblResult" layoutX="316.0" layoutY="235.0" prefHeight="18.0" prefWidth="166.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="316.0" AnchorPane.rightAnchor="316.0" />
    </children>
 </AnchorPane>
