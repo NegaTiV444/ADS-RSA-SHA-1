@@ -14,7 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import logic.*;
 
-import static logic.SHA1.encodeHex;
+//import static logic.SHA1.encodeHex;
 
 public class Controller {
 
@@ -88,37 +88,32 @@ public class Controller {
                     BigInteger r = p.multiply(q);
                     BigInteger f = (p.subtract(BigInteger.valueOf(1))).multiply(q.subtract(BigInteger.valueOf(1)));
                     BigInteger e, hash, signature;
-                    if (MathProvider.isPrime(p) && (MathProvider.isPrime(q)) && (d.compareTo(BigInteger.ZERO) != 0))
+                    if (MathProvider.isPrime(p) && (MathProvider.isPrime(q)) && (d.compareTo(BigInteger.ONE) > 0) && (p.multiply(q).bitLength() >= 160) && (p.compareTo(q) != 0))
                     {
                         e = Model.getE(f, d);
-                        if (e.gcd(d).mod(f).compareTo(BigInteger.valueOf(1)) == 0)
+                        if (((MathProvider.gcdWide(d, f).d.compareTo(BigInteger.valueOf(1)) == 0) && (d.compareTo(f) < 0))) //TODO FIX
                         {
                             OpenFile();
                             if (isFileOpened)
                             {
-                                //showAlert("AAAA", encodeHex("BSUIR"));
                                 hash = SHA1.getHash(Model.getData());
-                                System.out.println(encodeHex("BSUIR"));
-                                //showAlert("Easy", hash.toString(16));
                                 System.out.println(hash.toString(16));
                                 signature = MathProvider.pow(hash, d, r);
                                 System.out.println(signature.toString(16));
                                 X = signature;
                                 arHash.setText("Hash(10) = " + hash.toString() + "\nHash(16) = " + hash.toString(16));
-                                arResults.setText("R = " + r.toString() + "\nSecret key = " + e.toString() + "\nSignature = " + signature.toString());
-                                //showAlert("Easy ^ 2", signature.toString());
+                                arResults.setText("R = " + r.toString() + "\nOpen key = " + e.toString() + "\nSignature = " + signature.toString());
                                 SaveFile();
                             }
                         }
                         else
-                            showAlert("Error","Wrong d", "d must satisfy '(e*d) mod φ(r) = 1' ");
-
+                            showAlert("AAAA","Wrong d", "d must satisfy '(e*d) mod φ(r) = 1' ");
                     }
                     else
-                        showAlert("Error","Wrong input", "P and Q must be prime. B must be greater than zero");
+                        showAlert("AAAA","Wrong input", "Please enter the correct numbers");
                 }
                 else
-                    showAlert("Error","Wrong input", "Please enter the numbers");
+                    showAlert("AAAA","Wrong input", "Please enter the numbers");
             }
         });
 
@@ -133,10 +128,10 @@ public class Controller {
                     BigInteger r = p.multiply(q);
                     BigInteger f = (p.subtract(BigInteger.valueOf(1))).multiply(q.subtract(BigInteger.valueOf(1)));
                     BigInteger e, hash, s;
-                    if (MathProvider.isPrime(p) && (MathProvider.isPrime(q)) && (d.compareTo(BigInteger.ZERO) != 0))
+                    if (MathProvider.isPrime(p) && (MathProvider.isPrime(q)) && (d.compareTo(BigInteger.ONE) > 0) && (p.multiply(q).bitLength() >= 160) && (p.compareTo(q) != 0))
                     {
                         e = Model.getE(f, d);
-                        if (e.gcd(d).mod(f).compareTo(BigInteger.valueOf(1)) == 0)
+                        if (((MathProvider.gcdWide(d, f).d.compareTo(BigInteger.valueOf(1)) == 0) && (d.compareTo(f) < 0))) //TODO FIX
                         {
                             OpenFileWithSignature();
 
@@ -152,19 +147,19 @@ public class Controller {
                                     showAlert("EDS check", "Incorrect", "Signature is incorrect");
                                     lblResult.setText("Incorrect");
                                     arHash.setText("Hash(10) = " + hash.toString() + "\nHash(16) = " + hash.toString(16));
-                                    arResults.setText("R = " + r.toString() + "\nSecret key = " + e.toString() + "\nSignature = " + X.toString());
+                                    arResults.setText("R = " + r.toString() + "\nOpen key = " + e.toString() + "\nSignature = " + X.toString());
                                 }
                             }
                         }
                         else
-                            showAlert("Error","Wrong d", "d must satisfy '(e*d) mod φ(r) = 1' ");
+                            showAlert("AAAA","Wrong d", "d must satisfy '(e*d) mod φ(r) = 1' ");
 
                     }
                     else
-                        showAlert("Error","Wrong input", "P and Q must be prime. B must be greater than zero");
+                        showAlert("AAAA","Wrong input", "Please enter the correct numbers");
                 }
                 else
-                    showAlert("Error","Wrong input", "Please enter the numbers");
+                    showAlert("AAAA","Wrong input", "Please enter the numbers");
             }
         });
     }
@@ -204,7 +199,7 @@ public class Controller {
         else
         {
             isFileOpened = false;
-            showAlert("Wring file","Ошибка", "Что-то пошло не так. Выберите другой файл");
+            showAlert("Wrong file","Ошибка", "Что-то пошло не так. Выберите другой файл");
         }
     }
 
@@ -225,7 +220,7 @@ public class Controller {
         else
         {
             isFileOpened = false;
-            showAlert("Wring file","Ошибка", "Что-то пошло не так. Выберите другой файл");
+            showAlert("Wrong file","Ошибка", "Что-то пошло не так. Выберите другой файл");
         }
     }
 

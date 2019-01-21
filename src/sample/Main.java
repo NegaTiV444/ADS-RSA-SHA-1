@@ -11,8 +11,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("TI_4.fxml"));
-        primaryStage.setTitle("Teory of Information LAB 4");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setTitle("TI LAB 4 Dubovski");
+        primaryStage.setScene(new Scene(root, 800, 550));
         Controller.STAGE = primaryStage;
         primaryStage.show();
     }

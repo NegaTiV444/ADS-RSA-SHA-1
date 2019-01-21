@@ -54,9 +54,6 @@ public class SHA1 {
                 temp = abs(data[i * 4 + 3]);
                 block[i] += temp;
             }
-        System.out.println("-----------------------------------------------------------------------------------------");
-        System.out.println(Integer.toBinaryString(block[0]));
-        System.out.println(Integer.toBinaryString(block[1]));
 
         for (int i = 16; i < 80; i++)
             block[i] = rol(block[i - 3] ^ block[i - 8] ^ block[i - 14] ^ block[i - 16], 1);
@@ -84,26 +81,11 @@ public class SHA1 {
             d = h3;
             e = h4;
             for (int j = 0; j < 80; j++) {
-                if (j < 20) {
-                    f = (b & c) | ((~b) & d);
-                    k = k1;
-                } else if (j < 40) {
-                    f = b ^ c ^ d;
-                    k = k2;
-                } else if (j < 60) {
-                    f = ((b & c) | (b & d) | (c & d));
-                    k = k3;
-                } else {
-                    f = b ^ c ^ d;
-                    k = k4;
-                }
-
-               t = rol(a, 5) + f + e + k + block[j];
-//                    t = rol(a, 5) + e + block[j] +
-//                            ( (j < 20) ?  1518500249 + ((b & c) | ((~b) & d))
-//                                    : (j < 40) ?  1859775393 + (b ^ c ^ d)
-//                                    : (j < 60) ? -1894007588 + ((b & c) | (b & d) | (c & d))
-//                                    : -899497514 + (b ^ c ^ d) );
+                    t = rol(a, 5) + e + block[j] +
+                            ( (j < 20) ?  1518500249 + ((b & c) | ((~b) & d))
+                                    : (j < 40) ?  1859775393 + (b ^ c ^ d)
+                                    : (j < 60) ? -1894007588 + ((b & c) | (b & d) | (c & d))
+                                    : -899497514 + (b ^ c ^ d) );
                     e = d;
                     d = c;
                     c = rol(b, 30);
@@ -128,81 +110,6 @@ public class SHA1 {
 
         hash = new BigInteger(strHash.toString(), 16);
         return hash;
-    }
-
-    public static String encodeHex(String str) {
-
-        // Convert a string to a sequence of 16-word blocks, stored as an array.
-        // Append padding bits and the length, as described in the SHA1 standard
-
-        byte[] x = str.getBytes();
-        int[] blks = new int[(((x.length + 8) >> 6) + 1) * 16];
-        int i;
-
-        for(i = 0; i < x.length; i++) {
-            blks[i >> 2] |= x[i] << (24 - (i % 4) * 8);
-        }
-
-        blks[i >> 2] |= 0x80 << (24 - (i % 4) * 8);
-        blks[blks.length - 1] = x.length * 8;
-        System.out.println(Integer.toBinaryString(blks[0]));
-        System.out.println(Integer.toBinaryString(blks[1]));
-        // calculate 160 bit SHA1 hash of the sequence of blocks
-
-        int[] w = new int[80];
-
-        int a =  1732584193;
-        int b = -271733879;
-        int c = -1732584194;
-        int d =  271733878;
-        int e = -1009589776;
-        int test = blks.length;
-        for(i = 0; i < blks.length; i += 16) {
-            int olda = a;
-            int oldb = b;
-            int oldc = c;
-            int oldd = d;
-            int olde = e;
-
-            for(int j = 0; j < 80; j++) {
-                w[j] = (j < 16) ? blks[i + j] :
-                        ( rol(w[j-3] ^ w[j-8] ^ w[j-14] ^ w[j-16], 1) );
-
-                int t = rol(a, 5) + e + w[j] +
-                        ( (j < 20) ?  1518500249 + ((b & c) | ((~b) & d))
-                                : (j < 40) ?  1859775393 + (b ^ c ^ d)
-                                : (j < 60) ? -1894007588 + ((b & c) | (b & d) | (c & d))
-                                : -899497514 + (b ^ c ^ d) );
-                e = d;
-                d = c;
-                c = rol(b, 30);
-                b = a;
-                a = t;
-            }
-
-            a = a + olda;
-            b = b + oldb;
-            c = c + oldc;
-            d = d + oldd;
-            e = e + olde;
-        }
-
-        // Convert 160 bit hash to base64
-
-
-        int[] words = {a,b,c,d,e};
-        StringBuilder sb = new StringBuilder();
-
-        for(int word : words) {
-            String hexWord = Integer.toHexString(word);
-            //Because to hexstring apparently doesn't pad?
-            while(hexWord.length() < 8) {
-                hexWord = "0" + hexWord;
-            }
-            sb.append(hexWord);
-        }
-
-        return sb.toString();
     }
 
 }

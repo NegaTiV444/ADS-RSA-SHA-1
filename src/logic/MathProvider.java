@@ -56,7 +56,7 @@ public class MathProvider {
     }
 
     public static boolean isPrime(BigInteger x){  //Ferma's test
-        if(x.compareTo(BigInteger.valueOf(0)) == 0)
+        if((x.compareTo(BigInteger.valueOf(0)) == 0) || (x.compareTo(BigInteger.valueOf(1)) == 0) )
             return false;
         if(x.compareTo(BigInteger.valueOf(2)) == 0)
             return true;
@@ -71,21 +71,24 @@ public class MathProvider {
         return true;
     }
 
-    //Test BigInteger
+    //------------------------------------------------------------------------------------------------------------------
 
     public static BigInteger pow(BigInteger x, BigInteger n, BigInteger mod)
     {
         BigInteger res = BigInteger.ONE;
-        for (BigInteger p = x; n.compareTo(BigInteger.ZERO) > 0; n = n.shiftRight(1), p = p.multiply(p).mod(mod))
+        for (BigInteger p = x;
+             n.compareTo(BigInteger.ZERO) > 0;
+             n = n.shiftRight(1),
+             p = p.multiply(p).mod(mod))
             if ((n.and(BigInteger.ONE).compareTo(BigInteger.ZERO)) != 0)
                 res = res.multiply(p).mod(mod);
         return res;
     }
 
-    public static triplBig gcdWide(BigInteger a, BigInteger b)
+    public static MyResult gcdWide(BigInteger a, BigInteger b)
     {
-        triplBig temphere = new triplBig(a,BigInteger.ONE,BigInteger.ZERO);
-        triplBig temphere2 = new triplBig();
+        MyResult temphere = new MyResult(a,BigInteger.ONE,BigInteger.ZERO);
+        MyResult temphere2 = new MyResult();
 
         if(b == BigInteger.ZERO)
         {
@@ -93,7 +96,7 @@ public class MathProvider {
         }
 
         temphere2 = gcdWide(b, a.mod(b));
-        temphere = new triplBig();
+        temphere = new MyResult();
 
         temphere.d=  temphere2.d;
         temphere.x = temphere2.y;

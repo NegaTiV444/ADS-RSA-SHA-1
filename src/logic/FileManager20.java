@@ -1,10 +1,8 @@
 package logic;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class FileManager20 {
 
@@ -38,6 +36,7 @@ public class FileManager20 {
         }
     }
 
+
     //Work with signature
 
     public static byte[] ReadByteArrWithSignature(File InputFile)
@@ -61,6 +60,15 @@ public class FileManager20 {
                     arrB.add(temp[i]);
                 sPrev = s;
             }
+
+            String[] strTemp = sPrev.split(" ");
+            StringBuilder strb = new StringBuilder(strTemp[0]);
+            for (int k = 1; k < strTemp.length - 1; k++)
+                strb = strb.append(strTemp[k]);
+            temp = strb.toString().getBytes();
+            tempLen = temp.length;
+            for (int i = 0; i < tempLen; i++)
+               arrB.add(temp[i]);
             tempLen = arrB.size();
             byte[] res = new byte[tempLen];
             for (int i = 0; i < tempLen; i++)
@@ -87,6 +95,8 @@ public class FileManager20 {
             while ((s = reader.readLine()) != null) {
                 sPrev = s;
             }
+            String[] strTemp = sPrev.split(" ");
+            sPrev = strTemp[strTemp.length - 1];
             BigInteger res = new BigInteger(sPrev);
             return res;
         } catch (IOException e) {
@@ -100,7 +110,7 @@ public class FileManager20 {
     {
         try(FileWriter fout = new FileWriter(OutputFile, true))
         {
-            fout.append("\n");
+            fout.append(" ");
             fout.append(strData);
         }
         catch(IOException ex)
@@ -108,4 +118,5 @@ public class FileManager20 {
             System.out.println(ex.getMessage());
         }
     }
+
 }

@@ -2,16 +2,16 @@ package logic;
 
 import java.math.BigInteger;
 
-public class triplBig
+public class MyResult
 {
-    triplBig(BigInteger one, BigInteger two, BigInteger three)
+    MyResult(BigInteger one, BigInteger two, BigInteger three)
     {
         d = one;
         x = two;
         y = three;
     }
 
-    triplBig()
+    MyResult()
     {
         ;
     }
